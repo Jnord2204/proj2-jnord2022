@@ -36,6 +36,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         // Check if a current user exists
         if User.current != nil {
             login()
+        } else {
+            logInScreen()
         }
     }
 
@@ -69,7 +71,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
         }
     }
+    
+    private func logInScreen() {
+        let storyboard = UIStoryboard(
+            name: Constants.storyboardIdentifier,
+            bundle: nil
+        )
 
+        let viewController = storyboard.instantiateViewController(
+            withIdentifier: Constants.loginNavigationControllerIdentifier
+        )
+
+        window?.rootViewController = viewController
+    }
     func sceneDidDisconnect(_ scene: UIScene) {
         // Called as the scene is being released by the system.
         // This occurs shortly after the scene enters the background, or when its session is discarded.

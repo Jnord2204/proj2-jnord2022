@@ -27,14 +27,27 @@ class FeedViewController: UIViewController {
         tableView.delegate = self
         tableView.dataSource = self
         tableView.allowsSelection = false
-    }
+        
+        let refreshControl = UIRefreshControl()
+
+        refreshControl.addTarget(
+            self,
+            action: #selector(refreshFeed),
+            for: .valueChanged
+        )
+
+        tableView.refreshControl = refreshControl    }
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         queryPosts()
     }
-
+        
+        @objc private func refreshFeed() {
+            queryPosts()
+        }
+    
     private func queryPosts() {
         // TODO: Pt 1 - Query Posts
 // https://github.com/parse-community/Parse-Swift/blob/3d4bb13acd7496a49b259e541928ad493219d363/ParseSwift.playground/Pages/2%20-%20Finding%20Objects.xcplaygroundpage/Contents.swift#L66
@@ -44,6 +57,7 @@ class FeedViewController: UIViewController {
         let query = Post.query()
             .include("user")
             .order([.descending("createdAt")])
+            .limit(10)
 
         // Fetch objects (posts) defined in query (async)
         query.find { [weak self] result in
@@ -51,7 +65,11 @@ class FeedViewController: UIViewController {
             case .success(let posts):
                 // Update local posts property with fetched posts
                 self?.posts = posts
+                self?.tableView.refreshControl?.endRefreshing()
+                
             case .failure(let error):
+                print("Error fetching posts: \(error)")
+                
                 self?.showAlert(description: error.localizedDescription)
             }
         }

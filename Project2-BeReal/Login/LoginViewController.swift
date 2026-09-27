@@ -17,7 +17,30 @@ class LoginViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
+        
+        view.backgroundColor = UIColor(
+                red: 0.06, green: 0.06, blue: 0.08, alpha: 1
+            )
+
+            // Username field
+            usernameField.backgroundColor = .secondarySystemBackground
+            usernameField.textColor = .label
+            usernameField.layer.cornerRadius = 10
+            usernameField.borderStyle = .none
+            usernameField.autocapitalizationType = .none
+            usernameField.autocorrectionType = .no
+            usernameField.textContentType = .username
+            usernameField.returnKeyType = .next
+
+            // Password field
+            passwordField.backgroundColor = .secondarySystemBackground
+            passwordField.textColor = .label
+            passwordField.layer.cornerRadius = 10
+            passwordField.borderStyle = .none
+            passwordField.isSecureTextEntry = true
+            passwordField.textContentType = .password
+            passwordField.returnKeyType = .done
+         }
     
     @IBAction func onLoginTapped(_ sender: Any) {
 
@@ -56,8 +79,17 @@ class LoginViewController: UIViewController {
     }
 
     private func showMissingFieldsAlert() {
-        let alertController = UIAlertController(title: "Opps...", message: "We need all fields filled out in order to log you in.", preferredStyle: .alert)
-        let action = UIAlertAction(title: "OK", style: .default)
+        let alertController = UIAlertController(
+            title: "Missing Information",
+            message: "Please enter your username and password.",
+            preferredStyle: .alert
+        )
+
+        let action = UIAlertAction(
+            title: "OK",
+            style: .default
+        )
+
         alertController.addAction(action)
         present(alertController, animated: true)
     }
